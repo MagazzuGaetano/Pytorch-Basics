@@ -5,3 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pytorch-basics"
 version = "0.1.0"
+authors = [{ name = "Magazzù Gaetano", email = "gaetanomagazzu3@gmail.com" }]
+description = "Pytorch Basics"
+readme = "README.md"
+license = { file = "LICENSE" }
+keywords = ["Pytorch", "Deep Learning", "CNN", "Image Classification"]
+
+[project.urls]
+Repository = "https://github.com/MagazzuGaetano/Pytorch-Basics"
+
+[tool.ruff.isort]
+lines-after-imports = 2
+lines-between-types = 1
+combine-as-imports = true
+known-first-party = ["src"]
