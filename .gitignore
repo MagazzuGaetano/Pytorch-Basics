@@ -161,8 +161,8 @@ cython_debug/
 
 .vscode/
 
-data/
+/data/
 
-models/
+/models/
 
-outputs/
+/outputs/
