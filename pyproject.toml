@@ -14,7 +14,7 @@ keywords = ["Pytorch", "Deep Learning", "CNN", "Image Classification"]
 [project.urls]
 Repository = "https://github.com/MagazzuGaetano/Pytorch-Basics"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 lines-after-imports = 2
 lines-between-types = 1
 combine-as-imports = true
