@@ -1,3 +1,4 @@
+from pathlib import Path
 import torch
 import torch.nn as nn
 
@@ -16,6 +17,7 @@ from src.config import DATA_FOLDER
 
 
 def main():
+    checkpoint_path = "model.pth"
     learning_rate = 1e-3
     batch_size = 64
     epochs = 10
@@ -56,8 +58,16 @@ def main():
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+    start_epoch = 0
 
-    for epoch in range(epochs):
+    # load checkpoint
+    if Path(checkpoint_path).exists():
+        checkpoint = torch.load(checkpoint_path)
+        start_epoch = checkpoint["epoch"]
+        model.load_state_dict(checkpoint["state_dict"])
+        optimizer.load_state_dict(checkpoint["optimizer"])
+
+    for epoch in range(start_epoch, epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
         train_loop(train_loader, model, loss_fn, optimizer, device)
 
@@ -65,6 +75,14 @@ def main():
         test_loop(val_loader, model, loss_fn, device)
 
     print("Done!")
+
+    # save the model
+    state = {
+        "epoch": epoch,
+        "state_dict": model.state_dict(),
+        "optimizer": optimizer.state_dict(),
+    }
+    torch.save(state, "model.pth")
 
 
 if __name__ == "__main__":
