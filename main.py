@@ -24,6 +24,11 @@ def main():
     batch_size = 64
     epochs = 10
 
+    # set reproducibility
+    random_seed = 42
+    torch.backends.cudnn.enabled = False
+    torch.manual_seed(random_seed)
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using {device} device")
 
