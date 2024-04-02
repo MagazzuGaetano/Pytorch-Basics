@@ -10,6 +10,8 @@ from torchvision.transforms import Lambda
 from torch.utils.data import DataLoader
 from src.datasets.animal_dataset import AnimalDataset
 
+from torchmetrics.classification import MulticlassF1Score
+
 from src.train import train_loop
 from src.test import test_loop
 
@@ -23,6 +25,7 @@ def main():
     learning_rate = 1e-3
     batch_size = 64
     epochs = 10
+    num_classes = 10
 
     # set reproducibility
     random_seed = 42
@@ -31,6 +34,9 @@ def main():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using {device} device")
+
+    train_metric = MulticlassF1Score(num_classes).to(device)
+    val_metric = MulticlassF1Score(num_classes).to(device)
 
     model = MLP().to(device)
 
@@ -44,7 +50,7 @@ def main():
     )
 
     target_transform = Lambda(
-        lambda y: torch.zeros(10, dtype=torch.float).scatter_(
+        lambda y: torch.zeros(num_classes, dtype=torch.float).scatter_(
             dim=0, index=torch.tensor(y), value=1
         )
     )
@@ -76,11 +82,19 @@ def main():
 
     for epoch in range(start_epoch, epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
-        train_loop(train_loader, model, loss_fn, optimizer, device, train_print_freq)
+        train_loop(
+            train_loader,
+            model,
+            loss_fn,
+            optimizer,
+            device,
+            train_metric,
+            train_print_freq,
+        )
 
         # validation
         if epoch % val_freq == 0:
-            test_loop(val_loader, model, loss_fn, device)
+            test_loop(val_loader, model, loss_fn, device, val_metric)
 
     print("Done!")
 
