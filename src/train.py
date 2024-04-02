@@ -8,10 +8,11 @@ def train_loop(dataloader, model, loss_fn, optimizer, device, metric, train_prin
         y = y.to(device)
 
         pred = model(X)
-        loss = loss_fn(pred, y)
-        train_loss += loss.item()
 
-        f1 = metric(pred.argmax(1), y.argmax(1))
+        loss = loss_fn(pred, y)
+        train_loss = train_loss + loss.item()
+
+        f1 = metric(pred, y)
 
         loss.backward()
         optimizer.step()

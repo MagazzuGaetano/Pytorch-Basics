@@ -12,8 +12,8 @@ def test_loop(dataloader, model, loss_fn, device, metric):
             y = y.to(device)
 
             pred = model(X)
-            test_loss += loss_fn(pred, y).item()
-            metric.update(pred.argmax(1), y.argmax(1))
+            test_loss = test_loss + loss_fn(pred, y).item()
+            metric.update(pred, y)
 
     test_loss /= num_batches
     f1 = metric.compute()
