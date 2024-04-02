@@ -21,3 +21,5 @@ def test_loop(dataloader, model, loss_fn, device, metric):
     print(f"Test Epoch: \n Avg loss: {test_loss:>8f}, Avg metric: {f1:.2%} \n")
 
     metric.reset()
+
+    return test_loss, f1

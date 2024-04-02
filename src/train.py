@@ -29,3 +29,5 @@ def train_loop(dataloader, model, loss_fn, optimizer, device, metric, train_prin
     print(f"Train Epoch: \n Avg loss: {loss:>7f}, Avg metric: {f1:.2%}")
 
     metric.reset()
+
+    return train_loss, f1
