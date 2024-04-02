@@ -1,4 +1,4 @@
-def train_loop(dataloader, model, loss_fn, optimizer, device):
+def train_loop(dataloader, model, loss_fn, optimizer, device, train_print_freq):
     num_batches = len(dataloader)
     model.train()
     for batch, (X, y) in enumerate(dataloader):
@@ -9,6 +9,6 @@ def train_loop(dataloader, model, loss_fn, optimizer, device):
         optimizer.step()
         optimizer.zero_grad()
 
-        if batch % 50 == 0:
+        if batch % train_print_freq == 0:
             loss = loss.item()
             print(f"loss: {loss:>7f}  [{batch:>5d}/{num_batches:>5d}]")

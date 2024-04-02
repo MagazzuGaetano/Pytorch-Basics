@@ -17,6 +17,8 @@ from src.config import DATA_FOLDER
 
 
 def main():
+    train_print_freq = 50
+    val_freq = 1
     checkpoint_path = "model.pth"
     learning_rate = 1e-3
     batch_size = 64
@@ -69,10 +71,11 @@ def main():
 
     for epoch in range(start_epoch, epochs):
         print(f"Epoch {epoch+1}\n-------------------------------")
-        train_loop(train_loader, model, loss_fn, optimizer, device)
+        train_loop(train_loader, model, loss_fn, optimizer, device, train_print_freq)
 
         # validation
-        test_loop(val_loader, model, loss_fn, device)
+        if epoch % val_freq == 0:
+            test_loop(val_loader, model, loss_fn, device)
 
     print("Done!")
 
