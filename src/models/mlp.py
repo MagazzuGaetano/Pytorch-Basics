@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 from torchsummary import summary
 
@@ -18,5 +19,6 @@ class MLP(nn.Module):
 
 
 if __name__ == "__main__":
-    model = MLP()
-    summary(model, (3, 224, 224), 16)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = MLP().to(device)
+    summary(model, (3, 224, 224), 16, device)
