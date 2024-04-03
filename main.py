@@ -36,7 +36,7 @@ def main():
     learning_rate = 1e-3
     weight_decay = 5e-4
     batch_size = 64
-    epochs = 2
+    epochs = 20
     num_classes = 10
 
     # set reproducibility
@@ -54,8 +54,6 @@ def main():
     train_results["train_metric"] = []
     train_results["val_loss"] = []
     train_results["val_metric"] = []
-
-    # model = MLP(width=224, height=224, channels=3, num_classes=num_classes).to(device)
 
     model = VGG16(num_classes=num_classes).to(device)
 
