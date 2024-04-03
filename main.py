@@ -11,12 +11,13 @@ from src.models.vgg16 import VGG16
 
 from torchmetrics.classification import MulticlassF1Score
 
-from src.train import train_loop
-from src.test import test_loop
+import matplotlib.pyplot as plt
+
+from src import option
 
 from src.config import DATA_FOLDER
-
-import matplotlib.pyplot as plt
+from src.train import train_loop
+from src.test import test_loop
 
 
 def plot_loss(train_metric, test_metric):
@@ -30,17 +31,19 @@ def plot_loss(train_metric, test_metric):
 
 
 def main():
-    train_print_freq = 50
-    val_freq = 1
-    checkpoint_path = "model.pth"
-    learning_rate = 1e-3
-    weight_decay = 5e-4
-    batch_size = 64
-    epochs = 20
-    num_classes = 10
+    args = option.parser.parse_args()
+
+    train_print_freq = args.train_print_freq
+    val_print_freq = args.val_print_freq
+    checkpoint_path = args.checkpoint_path
+    learning_rate = args.learning_rate
+    weight_decay = args.weight_decay
+    batch_size = args.batch_size
+    epochs = args.epochs
+    num_classes = args.num_classes
 
     # set reproducibility
-    random_seed = 42
+    random_seed = args.seed
     torch.backends.cudnn.enabled = False
     torch.manual_seed(random_seed)
 
@@ -118,7 +121,7 @@ def main():
         train_results["train_metric"].append(train_metric_value.detach().cpu().numpy())
 
         # validation
-        if epoch % val_freq == 0:
+        if epoch % val_print_freq == 0:
             val_loss, val_metric_value = test_loop(
                 val_loader, model, loss_fn, device, val_metric
             )
