@@ -1,13 +1,13 @@
 from pathlib import Path
 import torch
 import torch.nn as nn
-import torchvision
-
 
 import torchvision.transforms as transforms
 
 from torch.utils.data import DataLoader
 from src.datasets.animal_dataset import AnimalDataset
+
+from src.models.vgg16 import VGG16
 
 from torchmetrics.classification import MulticlassF1Score
 
@@ -57,15 +57,7 @@ def main():
 
     # model = MLP(width=224, height=224, channels=3, num_classes=num_classes).to(device)
 
-    weigths = torchvision.models.VGG16_Weights.DEFAULT
-    model = torchvision.models.vgg16(weights=weigths)
-
-    # Freeze early layers
-    for param in model.features.parameters():
-        param.requires_grad = False
-
-    model.classifier[-1] = nn.Linear(4096, num_classes)
-    model.to(device)
+    model = VGG16(num_classes=num_classes).to(device)
 
     transform = transforms.Compose(
         [
